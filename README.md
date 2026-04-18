@@ -53,9 +53,9 @@
 
 1. **已登录的 Windows 桌面版微信**。Skill 不会替你扫码登录，遇到扫码页会停下来让你本人扫。
 2. **computer-use MCP 可用**，并会在任务开始时一次性向你申请以下应用权限：
-   - `微信`
+   - `微信`（新版微信 4.x 所有子进程都叫 `Weixin.exe`，会被 resolver 统一映射回"微信"，申请这一个就够 —— **不要**再追加 `Wechatappex` / `msedgewebview2.exe` / `Weixin` 等变体，resolver 会驳回）
    - `任务管理器`
-   - `文件资源管理器`（新版微信可能还需要 `msedgewebview2.exe`）
+   - `文件资源管理器`（托盘区域属于 Explorer 进程，找托盘里的微信图标需要它；也是解 `Wechatappex` 假授权错误的关键）
    - `clipboardWrite` 剪贴板写入（中文消息必须走剪贴板，`type` 直接打中文会丢字）
 3. **建议独占前台使用**。Skill 工作时你不要再抢鼠标/键盘，以免点到错误位置。
 
