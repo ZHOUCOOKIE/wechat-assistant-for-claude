@@ -23,7 +23,11 @@
 
 ## 安装方式
 
-### Claude Code / Cowork mode
+### 方式 1：从 Cowork UI 导入（推荐，最简单）
+
+在 Cowork 界面点右上角 **Customize** → 打开 **Skills** 面板 → 导入 `SKILL.md` 即可。不用自己拼路径，也不用手动重启。
+
+### 方式 2：手动放到 skills 目录
 
 把 `SKILL.md` 放到你的 skills 目录下，作为一个子文件夹：
 
