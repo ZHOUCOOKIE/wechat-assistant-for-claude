@@ -18,7 +18,7 @@
 
 ## 平台支持
 
-- ✅ **Windows** — 我本人实测并调通的全流程，覆盖新版微信 4.x（Weixin.exe，UI 用 WebView2）和旧版 WeChat 3.x
+- ✅ **Windows** — 我本人实测并调通的全流程，只测试了微信 4.1.8.29（Weixin.exe，UI 用 WebView2）
 - ❓ **macOS / Linux** — 我没测过。`Wechatappex` 假授权之类的 Windows 特有问题在 macOS 上可能根本不存在，但 UI 布局、进程名、快捷键、前台焦点机制都不一样，能跑也不一定按这份 Skill 的步骤走。
 
 ## 安装方式
@@ -57,8 +57,7 @@
 
 1. **已登录的 Windows 桌面版微信**。Skill 不会替你扫码登录，遇到扫码页会停下来让你本人扫。
 2. **computer-use MCP 可用**，并会在任务开始时一次性向你申请以下应用权限：
-   - `微信`（新版微信 4.x 所有子进程都叫 `Weixin.exe`，会被 resolver 统一映射回"微信"，申请这一个就够 —— **不要**再追加 `Wechatappex` / `msedgewebview2.exe` / `Weixin` 等变体，resolver 会驳回）
-   - `任务管理器`
+   - `微信`（微信 4.1.8.29 所有子进程都叫 `Weixin.exe`，会被 resolver 统一映射回"微信"，申请这一个就够 —— **不要**再追加 `Wechatappex` / `msedgewebview2.exe` / `Weixin` 等变体，resolver 会驳回）
    - `文件资源管理器`（托盘区域属于 Explorer 进程，找托盘里的微信图标需要它；也是解 `Wechatappex` 假授权错误的关键）
    - `clipboardWrite` 剪贴板写入（中文消息必须走剪贴板，`type` 直接打中文会丢字）
 3. **建议独占前台使用**。Skill 工作时你不要再抢鼠标/键盘，以免点到错误位置。
@@ -67,7 +66,7 @@
 
 完整内容见 [`SKILL.md`](./SKILL.md)，这里只列最容易踩坑的几条：
 
-- **不要一上来就 `open_application("微信")`**。如果微信已经在后台跑，直接 `open_application` 会触发"新实例登录"流程，把你已登录的会话搅乱。正确顺序是：先判断进程在不在跑 → 在跑就从任务栏/托盘激活已有实例，不在跑才启动新实例。
+- **不要一上来就 `open_application("微信")`**。如果微信已经在后台跑，直接 `open_application` 会触发"新实例登录"流程，把你已登录的会话搅乱。正确顺序是：先从任务栏/托盘尝试激活已有实例，都找不到才启动新实例。
 - **`Wechatappex` 假授权错误的解法是 `open_application("文件资源管理器")`**。微信启动流程里某些中转层会以 `Wechatappex` 的身份占据前台，导致 `left_click` 被 frontmost-app 检查拦下来。打开文件资源管理器把前台焦点抢走就好，不是真的缺授权，**不要**去追加 `Wechatappex` 相关的授权（resolver 一定会驳回）。
 - **中文消息走剪贴板**。`write_clipboard` + `ctrl+v` 发送，不要用 `type` 直接打中文。
 - **发送前先读 5–10 条最近聊天记录**。消息要像"本人会说的话"，呼应对方的最近话题、沿用对话里已有的命名/语气/emoji 风格，不要模板化客套话，不要凭空编事实。
